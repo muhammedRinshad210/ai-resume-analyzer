@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>signup</title>
+</head>
+<body>
+    <h2>Sign up </h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="username" placeholder="username">
+        <br><br>
+
+        <input type="password" name="password" placeholder="password">
+        <br><br>
+        <input type="password" name="confirm" placeholder="cofirm password">
+        <br><br>
+
+        <button type="submit">Signup</button>
+    </form>
+
+{% if error %}
+<p> {{ error }} </p>
+{% endif %}   
+</body>
+</html>
