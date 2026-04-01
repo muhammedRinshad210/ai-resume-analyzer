@@ -5,7 +5,7 @@ import PyPDF2
 from .models import Resume
 # Create your views here.
 
-
+from django.db.models import Q
 def index(request):
     
      # 🔐 AUTH CHECK FIRST
@@ -29,17 +29,19 @@ def index(request):
         # search
         elif 'search' in request.POST:
             query = request.POST.get('search')
-
+            
             data = Resume.objects.filter(
+                user=request.user,
                 name__icontains=query
-            ) | Resume.objects.filter(
-                skills__icontains=query
-            )
-
+                ) | Resume.objects.filter(
+                    user=request.user,
+                    skills__icontains=query
+                    )
+            
             return render(request, "home.html", {
-                "feedback" : [f"🔍 Result of '{query}'"],
-                "data" : Resume.objects.filter(user = request.user)
-            })
+                "feedback": [f"🔍 Result of '{query}'"],
+                "data": data
+                })
         
 
         # edit
