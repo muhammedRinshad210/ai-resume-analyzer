@@ -22,7 +22,7 @@ def index(request):
             Resume.objects.filter(id=request.POST['delete_id']).delete()
             return render(request, "home.html", { 
                 "feedback" : ["🗑️ Resume deleted"],
-                "data" : Resume.objects.all()
+                "data" : Resume.objects.filter(user = request.user)
             })
         
 
@@ -38,7 +38,7 @@ def index(request):
 
             return render(request, "home.html", {
                 "feedback" : [f"🔍 Result of '{query}'"],
-                "data" : data
+                "data" : Resume.objects.filter(user = request.user)
             })
         
 
@@ -48,7 +48,7 @@ def index(request):
 
             return render(request, "home.html", {
                 "edit_data" : edit_data,
-                "data" : Resume.objects.all()
+                "data" : Resume.objects.filter(user = request.user)
             })
         
         # update
@@ -61,7 +61,7 @@ def index(request):
 
                 return render(request, "home.html", {
                     "feedback" : feedback,
-                    "data" : data
+                    "data" : Resume.objects.filter(user = request.user)
                 })
 
             obj = Resume.objects.filter(id = update_id).first()
