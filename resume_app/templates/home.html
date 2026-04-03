@@ -4,146 +4,135 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resume Reviewer</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
 </head>
 
-<style>
-    body { 
-        font-family: Arial;
-        background-color: #f4f6f8;
-        padding: 20px;
-    }
 
-    h1 {
-        color: #333;
-    }
-    
-    form { 
-        margin-bottom: 20px;
-    }
+<body class="bg-light">
 
-    input, button { 
-        padding: 10px;
-        margin-top: 10px;
-    }
+<div class="container py-5">
+    <h1 class="text-center fw-bold mb-3">📄 Resume Reviewer</h1>
+    <p class="text-center text-muted mb-4"> Upload your resume</p>
 
-    button {
-        background-color: #007bff;
-        color: white;
-        border: none;
-        cursor: pointer;
-    }
+<!-- Upload -->
+<div class="row justify-content-center">
+    <div class="col-md-6">
 
-    button:hover { 
-        background-color: #0056b3;
-    }
-
-    table { 
-        width: 100%;
-        border-collapse: collapse;
-        background: white;
-    }
-
-    th, td { 
-        padding: 10px;
-        border: 1px solid #ddd;
-    }
-
-    th {
-        background-color: #007bff;
-        color: white;
-    }
-
-    tr:hover {
-        background-color: #f1f1f1;
-    }
-
-    ul {
-        list-style: none;
-        padding: 0;
-    }
-
-    li {
-        background: #e9ecef;
-        margin: 5px 0;
-        padding: 10px;
-        border-radius: 5px;
-    }
-</style>
-
-<body>
-    <h1>📄 Resume Reviewer</h1>
-    <p> Upload your resume</p>
-
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" class="card p-4 shadow-sm border-0">
         {% csrf_token %}
-        <input type="file" name="resume">
-        <button type="submit" > Upload </button>
+        <input type="file" name="resume" class="form-control mb-3" required>
+        <button type="submit" class="btn btn-primary w-100"> Upload </button>
     </form>
+    </div>
+</div>
 
-    <ul>
+<!-- Feedback -->
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-6">
+
+    <ul class="list-group shadow-sm">
         {% for item in feedback %}
-            <li>{{ item }} </li>
+            <li class="list-group-item"> {{ item }} </li>
         {% endfor %}
 
     </ul>
+    </div>
+    </div>
 
-    <h2>Saved Resume</h2>
 
-    <form method="POST">
+    <!-- Search -->
+<div class="mt-5">
+    <h2 class="mb-3">Saved Resume</h2>
+
+    <form method="POST" class="d-flex gap-2 mb-3">
         {% csrf_token %}
-        <input type="text" name="search" placeholder="search skills or name">
-        <button type="submit">search</button>
+        <input type="text" name="search" placeholder="search skills or name" class="form-control" required>
+        <button type="submit" class="btn btn-outline-primary">search</button>
     </form>
+    </div>
+    
+
+    <!-- Edit -->
+<div class="card p-3 mb-4 shadow-sm border-0">
 
     <h3>Edit Resume</h3>
 
-    <form method="POST">
+    <form method="POST" class="row g-2">
         {% csrf_token %}
-        <input type="hidden" name="update_id" value="{{ edit_data.id }}">
-        
-        <input type="text" name="name" placeholder="Name" value="{{ edit_data.name}}">
-        <input type="text" name="skills" placeholder="Skills" value="{{ edit_data.skills }}">
+        <input type="hidden" name="update_id" value="{{ edit_data.id }}" class="form-control" required>
 
-        <button type="submit">Update</button>
+    <div class="col-md-5">
+        <input type="text" name="name" placeholder="Name" value="{{ edit_data.name}}" class="form-control" required>
+    </div>
+
+    <div class="col-md-5">
+        <input type="text" name="skills" placeholder="Skills" value="{{ edit_data.skills }}" class="form-control" required>
+    </div>
+        <div class="col-md-2">
+            <button class="btn btn-success w-100">Update</button>
+        </div>
     </form>
+</div>
 
-    <table border="1">
+<!-- Table -->
+<div class="table-responsive">
+    <table class="table table-hover table-bordered align-middle bg-white">
+        <thead class="table-dark">
         <tr>
             <th>Name</th>
             <th>Skills</th>
             <th>Action</th>
             <th>Edit</th>
         </tr>
+        </thead>
     
-
+        <tbody>
     {% for item in data %}
         <tr>
             <td>{{ item.name }} </td>
             <td>{{ item.skills}} </td>
             <td>
+            <div class="d-flex gap-2">
+                <!-- Delete -->
                 <form method="POST">
                     {% csrf_token %}
                     <input type="hidden" name="delete_id" value="{{ item.id }}">
-                    <button type="submit"></button>
+                    <button class="btn btn-sm btn-outline-danger" >Delete</button>
                 </form>
             </td>
-
+            <!-- Edit -->
+             
             <td>
                 <form method="POST">
                     {% csrf_token %}
                     <input type="hidden" name="edit_id" value="{{ item.id }}">
-                    <button type="submit">Edit</button>
+                    <button class="btn btn-sm btn-outline-warning">Edit</button>
                 </form>
             </td>
         </tr>
+        </div>
         
 
     {% endfor %}
-    </table>
+    
+    </tbody>
+</table>
+</div>
+
+<!-- Logout -->
+    <div class="text-end mt-4">
 
     <form method="POST" action="{% url 'logout' %}">
         {% csrf_token %}
-        <button type="submit">Logout</button>
+        <button class="btn btn-outline-dark btn-sm">Logout</button> 
     </form>
+    </div>
+    
+
+</div>
 </body>
 </html>
